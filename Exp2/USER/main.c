@@ -147,12 +147,15 @@ int main(void)
 			temp = (int16_t)(temp_1*10);
 			if(temp<2680&&temp>temp_al)
 			{
-				TIM_SetCounter(TIM3,0);       		//计数器清空
-				time=0;
-				TIM_Cmd(TIM3, ENABLE); 	    			//使能定时器3
-				setPage(0x03);
-				LED0=1;
-				
+				if(LED0==0)
+				{	
+					TIM_SetCounter(TIM3,0);       		//计数器清空
+					time=0;
+					TIM_Cmd(TIM3, ENABLE); 	    			//使能定时器3
+					setPage(0x03);
+					LED0=1;
+				}
+
 				historied=1;
 				delay_ms(50);
 				temp_1=MAX31865_GetTemp();   //采样得到温度

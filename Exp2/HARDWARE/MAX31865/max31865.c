@@ -148,7 +148,7 @@ float tempCorrection(float temp_1)
 		if(temp_1>-52&&temp_1<-48)
 			temp_1=-50.8;  //-50.77
 	  if(temp_1>-27&&temp_1<-23)
-			temp_1=-24.4;  //-25.49
+			temp_1=-25.5;  //-25.49
 		if(temp_1>-1.5&&temp_1<1.5)
 			temp_1=0.0;  //0
 		if(temp_1>24&&temp_1<28)
@@ -171,6 +171,8 @@ float tempCorrection(float temp_1)
 			temp_1=238.6;  //238.70
 		if(temp_1>264&&temp_1<268)
 			temp_1=266.3;  //266.35
+		if(temp_1>268)
+			temp_1=999.9;
 		return temp_1;
 }
 
