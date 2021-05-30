@@ -83,7 +83,7 @@ unsigned char MAX31865_Read(unsigned char addr)
 /* MAX31865 配置*/
 void MAX31865_Cfg(void)
 {
-	MAX31865_Write(0x80, 0xD3); //BIAS ON,自动，3线，50HZ  根据文件修改四线还是三线  D3 1101 0011 
+	MAX31865_Write(0x80, 0xB3); //BIAS ON,自动，3线，50HZ  根据文件修改四线还是三线  D3 1101 0011 
 }
 
 /* MAX31865 获取温度 */
@@ -97,6 +97,8 @@ float MAX31865_GetTemp(void)
 	float b = -5.775e-7;
 	float rpoly;
 
+	MAX31865_Write(0x80, 0xB3);
+	
 	while(MAX31865_DRDY_READ);
 	
 	//MAX31865_Write(0x80, 0xD3);

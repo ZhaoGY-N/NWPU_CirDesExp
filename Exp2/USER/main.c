@@ -76,6 +76,7 @@ void history_gen(int temp)
 void history_send()
 {
 	u8 j,i,num;
+				//历史数据地址 0x0030 0x0040 0x0050 0x0060
 	
 	for(j=0x30;j<0x70;j+=0x10)//循环发送数据
 	{
@@ -146,32 +147,37 @@ int main(void)
 			temp = (int16_t)(temp_1*10);
 			if(temp<2680&&temp>temp_al)
 			{
-				historied=1;
-				history_gen(temp);
-				//历史数据地址 0x0030 0x0040 0x0050 0x0060
-				history_send();
-				TIM_SetCounter(TIM3,0);       		//计数器清空
-				time=0;
-				TIM_Cmd(TIM3, ENABLE); 	    			//使能定时器3
-				setPage(0x03);
-			}
-		}
-		if(temp<2680&&temp>temp_al&&historied==1)
-		{
-			delay_ms(20);
-			temp_1=MAX31865_GetTemp();   //采样得到温度
-			temp_1=tempCorrection(temp_1);
-			temp = (int16_t)(temp_1*10);
-			if(temp<2680&&temp>temp_al)
-			{
 				TIM_SetCounter(TIM3,0);       		//计数器清空
 				time=0;
 				TIM_Cmd(TIM3, ENABLE); 	    			//使能定时器3
 				setPage(0x03);
 				LED0=1;
-			}
+				
+				historied=1;
+				delay_ms(50);
+				temp_1=MAX31865_GetTemp();   //采样得到温度
+				temp_1=tempCorrection(temp_1);
+				temp = (int16_t)(temp_1*10);
 			
+				history_gen(temp);
+				history_send();
+			}
 		}
+//		if(temp<2680&&temp>temp_al&&historied==1)
+//		{
+//			delay_ms(50);
+//			temp_1=MAX31865_GetTemp();   //采样得到温度
+//			temp_1=tempCorrection(temp_1);
+//			temp = (int16_t)(temp_1*10);
+//			if(temp<2680&&temp>temp_al)
+//			{
+//				TIM_SetCounter(TIM3,0);       		//计数器清空
+//				time=0;
+//				TIM_Cmd(TIM3, ENABLE); 	    			//使能定时器3
+//				setPage(0x03);
+//				LED0=1;
+//			}
+//		}
 		if((temp<temp_al||temp>=2680)&&historied==1)
 		{
 			historied=0;
