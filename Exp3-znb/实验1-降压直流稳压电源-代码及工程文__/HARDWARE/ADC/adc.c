@@ -14,8 +14,9 @@
 //All rights reserved									  
 ////////////////////////////////////////////////////////////////////////////////// 	
 
-#define DataLen 1024
+#define DataLen 255
 u16 adcData[DataLen];
+u16 adcDataSo[DataLen];
 
 //初始化ADC															   
 void  Adc_Init(void)
@@ -94,18 +95,30 @@ int cmp_u16(const void* _a , const void* _b) //参数格式固定
 
 u16 Get_Adc_rankAver()
 {
+	static u32 index;
 	u32 t;
+	static u8 flag=0;
 	u32 minDatatemp=0;
 	
-	for(t=0;t<DataLen;t++)
+//	for(t=0;t<DataLen;t++)
 	{
-		adcData[t]=Get_Adc(ADC_Channel_5);
-		delay_ms(1);
+		adcData[index++]=Get_Adc(ADC_Channel_5);
+		delay_ms(5);
+		if(index>=DataLen)
+		{	
+			index=0;
+			flag=1;
+		}
 	}
-	qsort(adcData,DataLen,sizeof(adcData[0]),cmp_u16);
-	for(t=0;t<20;t++)
+	if(flag)
 	{
-		minDatatemp+=adcData[t+50];
+		for(t=0;t<DataLen;t++)
+			adcDataSo[t]=adcData[t];
+		qsort(adcDataSo,DataLen,sizeof(adcDataSo[0]),cmp_u16);
+		for(t=0;t<20;t++)
+		{
+			minDatatemp+=adcDataSo[t+50];
+		}
 	}
 	return minDatatemp/20;
 }
